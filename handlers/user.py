@@ -144,8 +144,7 @@ async def update_head_message(cells, head_message, sended_messages_ids):
             cell_value = cells[0][i][0]
             if cell_value.isdigit():
                 if message_index < len(sended_messages_ids):
-                    head += f'[{cells[0][i]}](https://t.me/c/{CHANNEL_ID[4:]}/{
-                        sended_messages_ids[message_index]})\n'
+                    head += f'[{cells[0][i]}](https://t.me/c/{CHANNEL_ID[4:]}/{sended_messages_ids[message_index]})\n'
                     message_index += 1
                 else:
                     head += f'{cells[0][i]}\n'
