@@ -29,6 +29,13 @@ async def send_start_message(message: Message):
         chat_id=message.from_user.id,
         text=await generate_start_text(message),
     )
+    
+@dp.message(F.text)
+async def text_handler(message: Message):
+    await message.answer(
+        text=f"<code>{message.forward_from_chat.id}</code>",
+        parse_mode='HTML'
+    )
 
 
 @dp.message(F.photo)
