@@ -5,4 +5,4 @@ from .callbacks import *
 
 
 async def generate_start_text(message):
-    return f"Привет, {message.from_user.full_name}! Я - бот"
+    return f"Привет, {message.from_user.full_name}, я бот"
