@@ -1,3 +1,4 @@
+import asyncio
 import io
 import aiofiles
 import openpyxl
@@ -143,6 +144,7 @@ async def send_messages(messages_to_send_future_list):
         for sm in sended_message:
             await Orm.add_message(sm, False)
         sended_messages_ids.append(sended_message[0].message_id)
+        await asyncio.sleep(1)
     return sended_messages_ids
 
 
