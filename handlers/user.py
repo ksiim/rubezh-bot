@@ -61,9 +61,13 @@ async def document_handler(message: Message):
         document_path = await download_document(message)
         message_ids = await Orm.delete_last_messages()
         if message_ids:
-            await bot.delete_messages(
+            chunk_size = 90
+            chunks = [message_ids[i:i + chunk_size] for i in range(0, len(message_ids), chunk_size)]
+            for chunk in chunks:
+                await bot.delete_messages(
                 chat_id=CHANNEL_ID,
-                message_ids=message_ids)
+                message_ids=chunk
+                )
         await process_document(message, document_path)
     else:
         await message.answer(
