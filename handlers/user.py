@@ -99,7 +99,7 @@ async def process_document(message: Message, document_path):
     )
     rows = sheet.iter_rows(values_only=True, min_row=8, max_row=sheet.max_row)
     messages_to_send_future_list = await prepare_messages(rows, head_message)
-    sended_messages_ids = await send_messages(messages_to_send_future_list)
+    sended_messages_ids = await send_messages(messages_to_send_future_list, telegram_id=message.from_user.id)
     head_message = await update_head_message(cells, head_message, sended_messages_ids)
     await Orm.add_message(head_message, True)
 
@@ -137,10 +137,16 @@ def prepare_media_group(row, head_message):
     return media_group
 
 
-async def send_messages(messages_to_send_future_list):
+async def send_messages(messages_to_send_future_list, telegram_id=None):
     sended_messages_ids = []
     for message in messages_to_send_future_list:
-        sended_message = await message
+        try:
+            sended_message = await message
+        except Exception as e:
+            await bot.send_Message(
+                chat_id=telegram_id,
+                text=f"Произошла ошибка при отправке сообщения\n\n{e}\n{e.args}"
+            )
         for sm in sended_message:
             await Orm.add_message(sm, False)
         sended_messages_ids.append(sended_message[0].message_id)
